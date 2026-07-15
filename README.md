@@ -21,22 +21,36 @@ Run `mdbook build` (or `mdbook serve`) as usual.
 
 ## Usage
 
-Navigation starts in **reading** mode, where every keystroke passes straight
-through to the browser and mdBook. Press the toggle key (`` ` `` by default) to
-enter **nav** mode; a small `VI` badge appears in the corner and the cursor
-becomes visible. Press it again — or `Escape` — to return to reading.
+Navigation starts in **reading** mode. Here `j`/`k` scroll the page Vim-style
+(with `d`/`u` for half-page and `gg`/`G` for top/bottom), while arrows, space,
+and PageUp/PageDown keep their native behavior. Press the toggle key
+(`` ` `` by default) to enter **nav** mode; a small `VI` badge appears in the
+corner and the cursor becomes visible. Press it again or press `Escape` to
+return to reading.
 
-| Key            | Action                                              |
-| -------------- | --------------------------------------------------- |
-| `` ` ``        | Toggle navigation on / off                          |
-| `Escape`       | Return to reading mode                              |
-| `j` / `↓`      | Move cursor down                                    |
-| `k` / `↑`      | Move cursor up                                       |
-| `h`            | Jump to the sidebar (chapter list)                  |
-| `l`            | Jump back to the page content                       |
-| `g` `g`        | Jump to the first item                              |
-| `G`            | Jump to the last item                               |
-| `Enter` / `o`  | Follow the chapter link, or a link under the cursor |
+**Reading mode**
+
+| Key       | Action                     |
+| --------- | -------------------------- |
+| `` ` ``   | Enter nav mode             |
+| `j` / `k` | Scroll down / up           |
+| `d` / `u` | Half-page down / up        |
+| `g` `g`   | Scroll to top              |
+| `G`       | Scroll to bottom           |
+
+**Nav mode**
+
+| Key           | Action                                              |
+| ------------- | --------------------------------------------------- |
+| `` ` ``       | Return to reading mode                              |
+| `Escape`      | Return to reading mode                              |
+| `j` / `↓`     | Move cursor down                                    |
+| `k` / `↑`     | Move cursor up                                       |
+| `h`           | Jump to the sidebar (chapter list)                  |
+| `l`           | Jump back to the page content                       |
+| `g` `g`       | Jump to the first item                              |
+| `G`           | Jump to the last item                               |
+| `Enter` / `o` | Follow the chapter link, or a link under the cursor |
 
 Keys are ignored while a text input is focused (such as mdBook's search box), so
 they never interfere with typing.
