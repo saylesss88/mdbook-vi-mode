@@ -68,7 +68,7 @@ cursor-color = "#e46876"  # any CSS color
 
 | Option         | Default     | Description                                                      |
 | -------------- | ----------- | ---------------------------------------------------------------- |
-| `toggle-key`   | `` "`" ``   | The [`KeyboardEvent.key`] value that turns navigation on and off |
+| `toggle-key`   | `` "`" ``   | The [`KeyboardEvent.key`] value that turns highlighted navigation on and off |
 | `start-active` | `false`     | Whether the cursor is shown before the toggle key is pressed     |
 | `cursor-color` | `"#e46876"` | Color of the cursor outline and the sidebar highlight            |
 
@@ -103,3 +103,4 @@ other renderer.
 
 ## License
 
+[Apache License 2.0](https://github.com/saylesss88/mdbook-vi-mode/blob/main/LICENSE)
