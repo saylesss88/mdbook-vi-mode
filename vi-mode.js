@@ -49,6 +49,24 @@
     cursorEl = null;
   };
 
+  const SCROLL_STEP = 64; // px per j/k press in reading mode
+
+  // mdBook may scroll the window or an inner #mdbook-content element depending
+  // on viewport and theme; pick whichever is actually scrollable.
+  const scroller = () => {
+    const c = document.getElementById('mdbook-content');
+    if (c && c.scrollHeight > c.clientHeight + 1) return c;
+    return document.scrollingElement || document.documentElement;
+  };
+
+  const scrollByPx = (dy, smooth) =>
+    scroller().scrollBy({ top: dy, behavior: smooth ? 'smooth' : 'auto' });
+
+  const scrollToEdge = (bottom) => {
+    const el = scroller();
+    el.scrollTo({ top: bottom ? el.scrollHeight : 0, behavior: 'smooth' });
+  };
+
   const paint = () => {
     if (!active) return;
     const list = targets(zone);
@@ -104,6 +122,41 @@
     }
   };
 
+  // Reading mode: Vim-style scrolling with no cursor. Keys the browser already
+  // handles (arrows, space, PageUp/PageDown) are deliberately left untouched.
+  const handleReadingKey = (e) => {
+    switch (e.key) {
+      case 'j':
+        scrollByPx(SCROLL_STEP);
+        break;
+      case 'k':
+        scrollByPx(-SCROLL_STEP);
+        break;
+      case 'd':
+        scrollByPx(scroller().clientHeight / 2, true);
+        break;
+      case 'u':
+        scrollByPx(-scroller().clientHeight / 2, true);
+        break;
+      case 'G':
+        scrollToEdge(true);
+        break;
+      case 'g':
+        if (pendingG) {
+          clearTimeout(gTimer);
+          pendingG = false;
+          scrollToEdge(false);
+        } else {
+          pendingG = true;
+          gTimer = setTimeout(() => (pendingG = false), 500);
+        }
+        return;
+      default:
+        return; // not ours; let it through
+    }
+    e.preventDefault();
+  };
+
   const onKey = (e) => {
     const t = e.target;
     if (t && t.matches('input, textarea, [contenteditable]')) return;
@@ -122,7 +175,10 @@
       }
       return;
     }
-    if (!active) return; // reading mode: let every other key through
+    if (!active) {
+      handleReadingKey(e);
+      return;
+    }
 
     switch (e.key) {
       case 'j':
