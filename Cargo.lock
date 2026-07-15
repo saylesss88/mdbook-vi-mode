@@ -167,6 +167,7 @@ dependencies = [
  "clap",
  "mdbook-preprocessor",
  "semver",
+ "serde",
  "serde_json",
 ]
 
