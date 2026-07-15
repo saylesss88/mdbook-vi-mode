@@ -4,8 +4,8 @@ use mdbook_preprocessor::{
     Preprocessor, PreprocessorContext,
 };
 
-const VI_MODE_CSS: &str = include_str!("vi-mode.css");
-const VI_MODE_JS: &str = include_str!("vi-mode.js");
+const VI_MODE_CSS: &str = include_str!("../vi-mode.css");
+const VI_MODE_JS: &str = include_str!("../vi-mode.js");
 
 pub struct ViMode;
 

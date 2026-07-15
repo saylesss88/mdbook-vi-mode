@@ -1,0 +1,10 @@
+.vi-cursor {
+  outline: 2px solid var(--vi-cursor, #e46876); /* kanagawa waveRed; themeable */
+  outline-offset: 2px;
+  border-radius: 4px;
+  scroll-margin-block: 40vh;
+}
+#mdbook-sidebar a.vi-cursor {
+  background: var(--vi-cursor, #e46876);
+  color: #1f1f28; /* kanagawa sumiInk for contrast */
+}

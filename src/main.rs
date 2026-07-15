@@ -1,4 +1,8 @@
 use clap::{Arg, ArgMatches, Command};
+use mdbook_preprocessor::{errors::Result, Preprocessor};
+use mdbook_vi_mode::ViMode;
+use semver::{Version, VersionReq};
+use std::{io, process};
 
 fn make_app() -> Command {
     Command::new("mdbook-vi-mode")
@@ -9,6 +13,7 @@ fn make_app() -> Command {
                 .about("Check whether a renderer is supported by this preprocessor"),
         )
 }
+
 fn main() {
     let matches = make_app().get_matches();
 

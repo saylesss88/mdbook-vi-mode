@@ -6,3 +6,5 @@ edition = "2024"
 [dependencies]
 clap = "4.6.1"
 mdbook-preprocessor = "0.5.4"
+semver = "1.0.28"
+serde_json = "1.0.150"
