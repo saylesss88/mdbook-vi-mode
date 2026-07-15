@@ -29,9 +29,9 @@
 //! [mdBook]: https://rust-lang.github.io/mdBook/
 
 use mdbook_preprocessor::{
+    Preprocessor, PreprocessorContext,
     book::{Book, BookItem},
     errors::{Error, Result},
-    Preprocessor, PreprocessorContext,
 };
 use serde::Deserialize;
 

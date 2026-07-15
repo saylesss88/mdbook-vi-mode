@@ -1,5 +1,5 @@
 use clap::{Arg, ArgMatches, Command};
-use mdbook_preprocessor::{errors::Result, Preprocessor};
+use mdbook_preprocessor::{Preprocessor, errors::Result};
 use mdbook_vi_mode::ViMode;
 use semver::{Version, VersionReq};
 use std::{io, process};
