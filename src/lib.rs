@@ -31,9 +31,9 @@
 pub mod config;
 
 use mdbook_preprocessor::{
-    Preprocessor, PreprocessorContext,
     book::{Book, BookItem},
     errors::{Error, Result},
+    Preprocessor, PreprocessorContext,
 };
 
 pub use config::ViConfig;
@@ -128,4 +128,70 @@ fn build_payload(config: &ViConfig) -> String {
         start_active = config.start_active,
         js = VI_MODE_JS,
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use mdbook_preprocessor::book::BookItem;
+    use serde_json::json;
+
+    fn ctx_and_book(renderer: &str, config: serde_json::Value) -> (PreprocessorContext, Book) {
+        let value = json!([
+            {
+                "root": "/tmp",
+                "config": config,
+                "renderer": renderer,
+                "mdbook_version": mdbook_preprocessor::MDBOOK_VERSION,
+            },
+            {
+                "items": [
+                    { "Chapter": {
+                        "name": "Chapter 1",
+                        "content": "# Chapter 1\n",
+                        "number": [1],
+                        "sub_items": [],
+                        "path": "ch1.md",
+                        "source_path": "ch1.md",
+                        "parent_names": []
+                    }}
+                ],
+                "__non_exhaustive": null
+            }
+        ]);
+        let bytes = serde_json::to_vec(&value).unwrap();
+        mdbook_preprocessor::parse_input(bytes.as_slice()).unwrap()
+    }
+
+    #[test]
+    fn skips_non_html_renderers() {
+        let (ctx, book) = ctx_and_book("epub", json!({}));
+        let out = ViMode.run(&ctx, book.clone()).unwrap();
+        assert_eq!(book, out);
+    }
+
+    #[test]
+    fn injects_payload_for_html() {
+        let (ctx, book) = ctx_and_book("html", json!({}));
+        let out = ViMode.run(&ctx, book).unwrap();
+        let BookItem::Chapter(ch) = &out.items[0] else {
+            panic!()
+        };
+        assert!(ch.content.contains("__viModeConfig"));
+        assert!(ch.content.contains(VI_MODE_JS));
+    }
+
+    #[test]
+    fn falls_back_to_defaults_on_invalid_config() {
+        let bad_config = json!({ "preprocessor": { "vi-mode": { "toggle-key": 5 } } });
+        let (ctx, book) = ctx_and_book("html", bad_config);
+        let out = ViMode.run(&ctx, book);
+        assert!(out.is_ok());
+    }
+
+    #[test]
+    fn supports_only_html() {
+        assert!(ViMode.supports_renderer("html").unwrap());
+        assert!(!ViMode.supports_renderer("epub").unwrap());
+    }
 }
