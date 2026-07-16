@@ -52,10 +52,10 @@ pub fn handle_preprocessing(pre: &dyn Preprocessor) -> Result<()> {
 /// usage this is enforced by the `clap` command definition, so this
 /// should not occur unless that definition is changed incorrectly.
 pub fn handle_supports(pre: &dyn Preprocessor, sub_args: &ArgMatches) -> ! {
-    let renderer = sub_args
-        .get_one::<String>("renderer")
-        .expect("Required argument");
-
+    let Some(renderer) = sub_args.get_one::<String>("renderer") else {
+        eprintln!("Internal error: missing required `renderer` argument");
+        process::exit(2);
+    };
     match pre.supports_renderer(renderer) {
         Ok(supported) => process::exit(i32::from(!supported)),
         Err(err) => {
