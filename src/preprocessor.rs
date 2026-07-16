@@ -1,6 +1,5 @@
 use clap::ArgMatches;
 use mdbook_preprocessor::{errors::Result, Preprocessor};
-use mdbook_vi_mode::ViMode;
 use semver::{Version, VersionReq};
 use std::{io, process};
 
@@ -42,6 +41,18 @@ pub fn handle_preprocessing(pre: &dyn Preprocessor) -> Result<()> {
     Ok(())
 }
 
+/// Checks whether the given preprocessor supports the renderer named in
+/// `sub_args`, then exits the process accordingly: `0` if supported,
+/// `1` if not, or `2` if checking support itself failed (in which case
+/// the error is printed to stderr first).
+///
+/// This function never returns to its caller.
+///
+/// # Panics
+///
+/// Panics if `sub_args` has no `renderer` argument present. In normal
+/// usage this is enforced by the `clap` command definition, so this
+/// should not occur unless that definition is changed incorrectly.
 pub fn handle_supports(pre: &dyn Preprocessor, sub_args: &ArgMatches) -> ! {
     let renderer = sub_args
         .get_one::<String>("renderer")
