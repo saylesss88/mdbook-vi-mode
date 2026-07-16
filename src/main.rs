@@ -1,5 +1,5 @@
-pub mod app;
-pub mod preprocessor;
+mod app;
+mod preprocessor;
 
 use mdbook_vi_mode::ViMode;
 use std::process;
