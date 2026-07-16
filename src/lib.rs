@@ -28,45 +28,20 @@
 //!
 //! [mdBook]: https://rust-lang.github.io/mdBook/
 
+pub mod config;
+
 use mdbook_preprocessor::{
     Preprocessor, PreprocessorContext,
     book::{Book, BookItem},
     errors::{Error, Result},
 };
-use serde::Deserialize;
+
+pub use config::ViConfig;
 
 /// The client-side stylesheet, embedded at compile time.
 const VI_MODE_CSS: &str = include_str!("../vi-mode.css");
 /// The client-side navigation script, embedded at compile time.
 const VI_MODE_JS: &str = include_str!("../vi-mode.js");
-
-/// User-facing options read from the `[preprocessor.vi-mode]` table.
-///
-/// Missing fields fall back to [`ViConfig::default`], so an empty table — or no
-/// table at all — yields sensible defaults. Unknown keys (such as mdBook's own
-/// `command` or `renderers` entries) are ignored.
-#[derive(Debug, Clone, Deserialize)]
-#[serde(default, rename_all = "kebab-case")]
-struct ViConfig {
-    /// The [`KeyboardEvent.key`] value that toggles navigation on and off.
-    ///
-    /// [`KeyboardEvent.key`]: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
-    toggle_key: String,
-    /// Whether the cursor is visible immediately on page load.
-    start_active: bool,
-    /// The CSS color used for the cursor outline and sidebar highlight.
-    cursor_color: String,
-}
-
-impl Default for ViConfig {
-    fn default() -> Self {
-        Self {
-            toggle_key: "`".to_owned(),
-            start_active: false,
-            cursor_color: "#e46876".to_owned(), // Kanagawa waveRed
-        }
-    }
-}
 
 /// The `mdbook-vi-mode` preprocessor.
 ///
