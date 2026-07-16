@@ -7,6 +7,7 @@
 //
 // This file is self-contained and carries its own defaults. The preprocessor
 // may override them by defining `window.__viModeConfig` before this runs.
+//
 (function () {
   if (window.__viModeLoaded) return; // injected on every page; run once
   window.__viModeLoaded = true;
