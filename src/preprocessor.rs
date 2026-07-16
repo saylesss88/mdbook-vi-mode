@@ -42,9 +42,7 @@ pub fn handle_preprocessing(pre: &dyn Preprocessor) -> Result<()> {
 }
 
 /// Checks whether the given preprocessor supports the renderer named in
-/// `sub_args`, then exits the process accordingly: `0` if supported,
-/// `1` if not, or `2` if checking support itself failed (in which case
-/// the error is printed to stderr first).
+/// `sub_args`, then exits the process accordingly.
 ///
 /// This function never returns to its caller.
 ///
@@ -58,11 +56,11 @@ pub fn handle_supports(pre: &dyn Preprocessor, sub_args: &ArgMatches) -> ! {
         .get_one::<String>("renderer")
         .expect("Required argument");
 
-    let supported = pre.supports_renderer(renderer).unwrap_or_else(|err| {
-        eprintln!("Error checking renderer support: {err}");
-        process::exit(2);
-    });
-
-    // Signal whether the renderer is supported by exiting with 1 or 0.
-    process::exit(i32::from(!supported));
+    match pre.supports_renderer(renderer) {
+        Ok(supported) => process::exit(i32::from(!supported)),
+        Err(err) => {
+            eprintln!("Error checking renderer support: {err}");
+            process::exit(2);
+        }
+    }
 }
