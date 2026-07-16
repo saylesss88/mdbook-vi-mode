@@ -2,7 +2,7 @@ use clap::{Arg, Command};
 
 #[must_use]
 pub fn make_app() -> Command {
-    Command::new("mdbook-vi-mode")
+    Command::new("vi-mode")
         .about("A mdBook preprocessor that implements vi-mode for mdBook")
         .subcommand(
             Command::new("supports")
